@@ -1,0 +1,12 @@
+{
+    "dataset": "Academic Integrity Synthetic Dataset",
+    "seed": 20261022,
+    "generated_at": "2026-11-11",
+    "external_data_used": false,
+    "source": "Fully synthetic data",
+    "submissions": 10000,
+    "similarity_reports": 10000,
+    "flags": 1000,
+    "cases": 300,
+    "ground_truth_separate": true
+}

@@ -1,0 +1,13 @@
+{
+    "learners.csv": "7de19c5812e3782c406ba1bb4d35f014c7783f968b308d2b64680212d52bc215",
+    "assessments.csv": "d65812c4f3225c7898bcf2627b28b998a88159a1ee441734b41442709b660fbe",
+    "submissions.csv": "c454e37f4327b6d51ece31c3df4751a485e3a41f4d5b6dc0585c94016d6b3d23",
+    "similarity_reports.csv": "72c1486d405b1c611c8c5ead0e6af983835217b957afb3226573a0a37bd63334",
+    "integrity_rules.csv": "fd228ff91deab10aceca3dbf4ad5dcf5466f37cd35de1789b1cc80bd1980fb82",
+    "cases.csv": "6533a65822c8e4380bcef4abff6ba7c286915d2a08b7fed5057f45324d375bc4",
+    "evidence_items.csv": "38d6ad8f4a81d89b8dcc10931dcbe766d4cc8207b32b109f453eb58aaf12334d",
+    "reviewers.csv": "9ceb3167563b0284e830baffadde89304650cb9825b079ef326d24a9960e7cbf",
+    "decisions.csv": "0020ed610d52548cc10f3142c37a8914efdf07aec01c31fb8c4c823dd0c690c3",
+    "appeals.csv": "ad447a525b21e0404920bfcf1ec58731cdd74ff271b3259932cad2575aed3e78",
+    "audit_events.csv": "c9c8c3dcd96984b48aa88b8d9720ae06f1c09c6188d64765e5260e3f34b0c297"
+}

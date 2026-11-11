@@ -1,0 +1,21 @@
+id,assessment_id,title,subject,due_date,created_at
+1,ASM-2026-0001,Academic Assignment 1,Database Systems,2026-02-01T00:00:00,2026-01-01T00:00:00
+2,ASM-2026-0002,Academic Assignment 2,Machine Learning,2026-02-02T00:00:00,2026-01-01T00:00:00
+3,ASM-2026-0003,Academic Assignment 3,Web Development,2026-02-03T00:00:00,2026-01-01T00:00:00
+4,ASM-2026-0004,Academic Assignment 4,Python,2026-02-04T00:00:00,2026-01-01T00:00:00
+5,ASM-2026-0005,Academic Assignment 5,Database Systems,2026-02-05T00:00:00,2026-01-01T00:00:00
+6,ASM-2026-0006,Academic Assignment 6,Machine Learning,2026-02-06T00:00:00,2026-01-01T00:00:00
+7,ASM-2026-0007,Academic Assignment 7,Web Development,2026-02-07T00:00:00,2026-01-01T00:00:00
+8,ASM-2026-0008,Academic Assignment 8,Python,2026-02-08T00:00:00,2026-01-01T00:00:00
+9,ASM-2026-0009,Academic Assignment 9,Database Systems,2026-02-09T00:00:00,2026-01-01T00:00:00
+10,ASM-2026-0010,Academic Assignment 10,Machine Learning,2026-02-10T00:00:00,2026-01-01T00:00:00
+11,ASM-2026-0011,Academic Assignment 11,Web Development,2026-02-11T00:00:00,2026-01-01T00:00:00
+12,ASM-2026-0012,Academic Assignment 12,Python,2026-02-12T00:00:00,2026-01-01T00:00:00
+13,ASM-2026-0013,Academic Assignment 13,Database Systems,2026-02-13T00:00:00,2026-01-01T00:00:00
+14,ASM-2026-0014,Academic Assignment 14,Machine Learning,2026-02-14T00:00:00,2026-01-01T00:00:00
+15,ASM-2026-0015,Academic Assignment 15,Web Development,2026-02-15T00:00:00,2026-01-01T00:00:00
+16,ASM-2026-0016,Academic Assignment 16,Python,2026-02-16T00:00:00,2026-01-01T00:00:00
+17,ASM-2026-0017,Academic Assignment 17,Database Systems,2026-02-17T00:00:00,2026-01-01T00:00:00
+18,ASM-2026-0018,Academic Assignment 18,Machine Learning,2026-02-18T00:00:00,2026-01-01T00:00:00
+19,ASM-2026-0019,Academic Assignment 19,Web Development,2026-02-19T00:00:00,2026-01-01T00:00:00
+20,ASM-2026-0020,Academic Assignment 20,Python,2026-02-20T00:00:00,2026-01-01T00:00:00

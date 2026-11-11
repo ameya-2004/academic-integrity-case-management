@@ -1,0 +1,239 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid py-4">
+
+    <div class="mb-4">
+        <h2 class="fw-bold">Academic Integrity Dashboard</h2>
+        <p class="text-muted">Monitor submissions, similarity flags, cases and appeals.</p>
+    </div>
+
+    <!-- Statistics -->
+    <div class="row g-3 mb-4">
+
+        {% for label, value, color in [
+            ("Learners", stats.learners, "primary"),
+            ("Submissions", stats.submissions, "primary"),
+            ("Similarity Flags", stats.flags, "warning"),
+            ("Total Cases", stats.cases, "info"),
+            ("Open Cases", stats.open_cases, "danger"),
+            ("Pending Appeals", stats.appeals, "success")
+        ] %}
+        <div class="col-md-4 col-lg-2">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <p class="text-muted mb-1">{{ label }}</p>
+                    <h2 class="fw-bold text-{{ color }}">{{ value }}</h2>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+
+    <!-- Charts -->
+    <div class="row g-4 mb-4">
+
+        <div class="col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5>Case Overview</h5>
+
+                    <canvas
+                        id="caseChart"
+                        data-open-cases="{{ stats.open_cases }}"
+                        data-total-cases="{{ stats.cases }}">
+                    </canvas>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5>Submission Overview</h5>
+
+                    <canvas
+                        id="submissionChart"
+                        data-submissions="{{ stats.submissions }}"
+                        data-flags="{{ stats.flags }}">
+                    </canvas>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Recent Cases -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+
+            <div class="d-flex justify-content-between mb-3">
+                <h5>Recent Cases</h5>
+
+                <a href="{{ url_for('cases') }}" class="btn btn-sm btn-outline-primary">
+                    View All Cases
+                </a>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+
+                    <thead class="table-light">
+                        <tr>
+                            <th>Case ID</th>
+                            <th>Learner</th>
+                            <th>Similarity</th>
+                            <th>Reviewer</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for case in recent_cases %}
+                        <tr>
+                            <td>{{ case.case_id }}</td>
+
+                            <td>{{ case.submission.learner.name }}</td>
+
+                            <td>
+                                {{ "%.1f"|format(case.similarity_report.similarity_score) }}%
+                            </td>
+
+                            <td>
+                                {{ case.reviewer.name if case.reviewer else "Unassigned" }}
+                            </td>
+
+                            <td>{{ case.status }}</td>
+
+                            <td>
+                                <a href="{{ url_for('case_details', case_id=case.id) }}"
+                                   class="btn btn-sm btn-outline-primary">
+                                    View
+                                </a>
+                            </td>
+                        </tr>
+
+                        {% else %}
+                        <tr>
+                            <td colspan="6" class="text-center text-muted">
+                                No recent cases found.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Due Process Notice -->
+    <div class="alert alert-info">
+        <strong>Due Process:</strong>
+        Similarity flags trigger human review. They do not automatically establish misconduct.
+    </div>
+
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    // --------------------------------
+    // CASE STATISTICS
+    // --------------------------------
+
+    const caseCanvas = document.getElementById("caseChart");
+
+    const openCases = Number(caseCanvas.dataset.openCases);
+    const totalCases = Number(caseCanvas.dataset.totalCases);
+    const otherCases = totalCases - openCases;
+
+    // --------------------------------
+    // SUBMISSION STATISTICS
+    // --------------------------------
+
+    const submissionCanvas = document.getElementById("submissionChart");
+
+    const submissions = Number(submissionCanvas.dataset.submissions);
+    const flags = Number(submissionCanvas.dataset.flags);
+
+    // --------------------------------
+    // CASE OVERVIEW CHART
+    // --------------------------------
+
+    new Chart(caseCanvas, {
+        type: "doughnut",
+
+        data: {
+            labels: ["Open Cases", "Other Cases"],
+
+            datasets: [{
+                data: [openCases, otherCases],
+
+                backgroundColor: [
+                    "#dc3545",
+                    "#198754"
+                ]
+            }]
+        },
+
+        options: {
+            responsive: true,
+
+            plugins: {
+                legend: {
+                    position: "bottom"
+                }
+            }
+        }
+    });
+
+    // --------------------------------
+    // SUBMISSION OVERVIEW CHART
+    // --------------------------------
+
+    new Chart(submissionCanvas, {
+        type: "bar",
+
+        data: {
+            labels: ["Submissions", "Similarity Flags"],
+
+            datasets: [{
+                label: "Total Records",
+
+                data: [
+                    submissions,
+                    flags
+                ],
+
+                backgroundColor: [
+                    "#0d6efd",
+                    "#ffc107"
+                ]
+            }]
+        },
+
+        options: {
+            responsive: true,
+
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+});
+</script>
+
+{% endblock %}

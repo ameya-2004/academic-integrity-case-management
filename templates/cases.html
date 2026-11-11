@@ -1,0 +1,183 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2>Academic Integrity Cases</h2>
+            <p class="text-muted mb-0">Review and manage flagged submissions.</p>
+        </div>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">
+            Dashboard
+        </a>
+    </div>
+
+    <!-- SEARCH AND FILTER -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-8">
+                    <label class="form-label">Search Cases</label>
+                    <input type="text"
+                           id="caseSearch"
+                           class="form-control"
+                           placeholder="Search case ID, learner, submission or reviewer...">
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Filter by Status</label>
+                    <select id="statusFilter" class="form-select">
+                        <option value="">All Statuses</option>
+                        <option value="Open">Open</option>
+                        <option value="Under Review">Under Review</option>
+                        <option value="Closed">Closed</option>
+                        <option value="Appealed">Appealed</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CASE TABLE -->
+    <div class="card shadow-sm">
+        <div class="card-body">
+
+            <div class="d-flex justify-content-between mb-3">
+                <h5>All Cases</h5>
+                <span class="text-muted">
+                    Total Cases: {{ cases|length }}
+                </span>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle" id="casesTable">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Case ID</th>
+                            <th>Learner</th>
+                            <th>Assessment</th>
+                            <th>Similarity</th>
+                            <th>Reviewer</th>
+                            <th>Status</th>
+                            <th>Created</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for case in cases %}
+                        <tr>
+                            <td>
+                                <strong>{{ case.case_id }}</strong>
+                            </td>
+
+                            <td>
+                                {{ case.submission.learner.name }}
+                                <br>
+                                <small class="text-muted">
+                                    {{ case.submission.learner.learner_id }}
+                                </small>
+                            </td>
+
+                            <td>
+                                {{ case.submission.assessment.title }}
+                            </td>
+
+                            <td>
+                                <span class="badge bg-warning text-dark">
+                                    {{ "%.1f"|format(case.similarity_report.similarity_score) }}%
+                                </span>
+                            </td>
+
+                            <td>
+                                {% if case.reviewer %}
+                                    {{ case.reviewer.name }}
+                                {% else %}
+                                    <span class="text-danger">Unassigned</span>
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                {% if case.status == "Open" %}
+                                    <span class="badge bg-primary">Open</span>
+                                {% elif case.status == "Closed" %}
+                                    <span class="badge bg-success">Closed</span>
+                                {% elif case.status == "Under Review" %}
+                                    <span class="badge bg-info text-dark">Under Review</span>
+                                {% elif case.status == "Appealed" %}
+                                    <span class="badge bg-warning text-dark">Appealed</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">{{ case.status }}</span>
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                <small>{{ case.created_at.strftime("%d-%m-%Y") }}</small>
+                            </td>
+
+                            <td>
+                                <a href="{{ url_for('case_details', case_id=case.id) }}"
+                                   class="btn btn-sm btn-outline-primary">
+                                    View Details
+                                </a>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="8" class="text-center text-muted py-4">
+                                No cases available.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <p id="noResults" class="text-center text-muted mt-3" style="display:none;">
+                No matching cases found.
+            </p>
+
+        </div>
+    </div>
+
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById("caseSearch");
+    const statusFilter = document.getElementById("statusFilter");
+    const tableRows = document.querySelectorAll("#casesTable tbody tr");
+    const noResults = document.getElementById("noResults");
+
+    function filterCases() {
+        const searchText = searchInput.value.toLowerCase().trim();
+        const selectedStatus = statusFilter.value.toLowerCase();
+
+        let visibleCount = 0;
+
+        tableRows.forEach(function (row) {
+            const rowText = row.innerText.toLowerCase();
+            const statusCell = row.cells[5];
+            const rowStatus = statusCell ? statusCell.innerText.toLowerCase().trim() : "";
+
+            const matchesSearch = rowText.includes(searchText);
+            const matchesStatus = !selectedStatus || rowStatus === selectedStatus;
+
+            if (matchesSearch && matchesStatus) {
+                row.style.display = "";
+                visibleCount++;
+            } else {
+                row.style.display = "none";
+            }
+        });
+
+        noResults.style.display = visibleCount === 0 ? "block" : "none";
+    }
+
+    searchInput.addEventListener("input", filterCases);
+    statusFilter.addEventListener("change", filterCases);
+});
+</script>
+{% endblock %}

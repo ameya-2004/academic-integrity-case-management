@@ -1,0 +1,61 @@
+id,appeal_id,case_id,reason,status,independent_reviewer_id,outcome,submitted_at,reviewed_at
+1,APL-INT-2026-000192-01,192,Learner requests an independent review.,Closed,1,Decision Overturned,2026-09-02T00:00:00,2026-09-05T00:00:00
+2,APL-INT-2026-000194-01,194,Learner requests an independent review.,Closed,1,Decision Overturned,2026-04-01T00:00:00,2026-04-04T00:00:00
+3,APL-INT-2026-000200-01,200,Learner requests an independent review.,Closed,1,Decision Overturned,2026-02-06T00:00:00,2026-02-09T00:00:00
+4,APL-INT-2026-000202-01,202,Learner requests an independent review.,Closed,1,Decision Overturned,2026-05-04T00:00:00,2026-05-07T00:00:00
+5,APL-INT-2026-000203-01,203,Learner requests an independent review.,Closed,1,Decision Overturned,2026-01-23T00:00:00,2026-01-26T00:00:00
+6,APL-INT-2026-000205-01,205,Learner requests an independent review.,Closed,1,Decision Overturned,2026-03-24T00:00:00,2026-03-27T00:00:00
+7,APL-INT-2026-000208-01,208,Learner requests an independent review.,Closed,1,Decision Overturned,2026-07-18T00:00:00,2026-07-21T00:00:00
+8,APL-INT-2026-000210-01,210,Learner requests an independent review.,Closed,1,Decision Overturned,2026-02-15T00:00:00,2026-02-18T00:00:00
+9,APL-INT-2026-000212-01,212,Learner requests an independent review.,Closed,1,Decision Overturned,2026-06-22T00:00:00,2026-06-25T00:00:00
+10,APL-INT-2026-000213-01,213,Learner requests an independent review.,Closed,1,Decision Overturned,2026-08-19T00:00:00,2026-08-22T00:00:00
+11,APL-INT-2026-000214-01,214,Learner requests an independent review.,Closed,1,Decision Overturned,2026-10-13T00:00:00,2026-10-16T00:00:00
+12,APL-INT-2026-000223-01,223,Learner requests an independent review.,Closed,1,Decision Overturned,2026-04-28T00:00:00,2026-05-01T00:00:00
+13,APL-INT-2026-000224-01,224,Learner requests an independent review.,Closed,1,Decision Overturned,2026-07-29T00:00:00,2026-08-01T00:00:00
+14,APL-INT-2026-000229-01,229,Learner requests an independent review.,Closed,1,Decision Overturned,2026-07-04T00:00:00,2026-07-07T00:00:00
+15,APL-INT-2026-000235-01,235,Learner requests an independent review.,Closed,1,Decision Overturned,2026-03-31T00:00:00,2026-04-03T00:00:00
+16,APL-INT-2026-000081-01,81,Learner requests an independent review.,Closed,2,Decision Upheld,2026-08-02T00:00:00,2026-08-05T00:00:00
+17,APL-INT-2026-000082-01,82,Learner requests an independent review.,Closed,1,Decision Upheld,2026-09-01T00:00:00,2026-09-04T00:00:00
+18,APL-INT-2026-000085-01,85,Learner requests an independent review.,Closed,1,Decision Upheld,2026-08-13T00:00:00,2026-08-16T00:00:00
+19,APL-INT-2026-000086-01,86,Learner requests an independent review.,Closed,1,Decision Upheld,2026-06-14T00:00:00,2026-06-17T00:00:00
+20,APL-INT-2026-000087-01,87,Learner requests an independent review.,Closed,1,Decision Upheld,2026-05-07T00:00:00,2026-05-10T00:00:00
+21,APL-INT-2026-000088-01,88,Learner requests an independent review.,Closed,1,Decision Upheld,2026-05-31T00:00:00,2026-06-03T00:00:00
+22,APL-INT-2026-000089-01,89,Learner requests an independent review.,Closed,1,Decision Upheld,2026-05-13T00:00:00,2026-05-16T00:00:00
+23,APL-INT-2026-000090-01,90,Learner requests an independent review.,Closed,1,Decision Upheld,2026-09-29T00:00:00,2026-10-02T00:00:00
+24,APL-INT-2026-000091-01,91,Learner requests an independent review.,Closed,2,Decision Upheld,2026-06-17T00:00:00,2026-06-20T00:00:00
+25,APL-INT-2026-000092-01,92,Learner requests an independent review.,Closed,1,Decision Upheld,2026-03-10T00:00:00,2026-03-13T00:00:00
+26,APL-INT-2026-000093-01,93,Learner requests an independent review.,Closed,1,Decision Upheld,2026-05-11T00:00:00,2026-05-14T00:00:00
+27,APL-INT-2026-000094-01,94,Learner requests an independent review.,Closed,1,Decision Upheld,2026-09-30T00:00:00,2026-10-03T00:00:00
+28,APL-INT-2026-000095-01,95,Learner requests an independent review.,Closed,1,Decision Upheld,2026-01-22T00:00:00,2026-01-25T00:00:00
+29,APL-INT-2026-000096-01,96,Learner requests an independent review.,Closed,1,Decision Upheld,2026-06-16T00:00:00,2026-06-19T00:00:00
+30,APL-INT-2026-000097-01,97,Learner requests an independent review.,Closed,1,Decision Upheld,2026-03-30T00:00:00,2026-04-02T00:00:00
+31,APL-INT-2026-000098-01,98,Learner requests an independent review.,Closed,1,Decision Upheld,2026-01-25T00:00:00,2026-01-28T00:00:00
+32,APL-INT-2026-000099-01,99,Learner requests an independent review.,Closed,1,Decision Upheld,2026-07-24T00:00:00,2026-07-27T00:00:00
+33,APL-INT-2026-000100-01,100,Learner requests an independent review.,Closed,1,Decision Upheld,2026-06-15T00:00:00,2026-06-18T00:00:00
+34,APL-INT-2026-000101-01,101,Learner requests an independent review.,Closed,2,Decision Upheld,2026-02-06T00:00:00,2026-02-09T00:00:00
+35,APL-INT-2026-000102-01,102,Learner requests an independent review.,Closed,1,Decision Upheld,2026-08-26T00:00:00,2026-08-29T00:00:00
+36,APL-INT-2026-000103-01,103,Learner requests an independent review.,Pending,,,2026-08-01T00:00:00,
+37,APL-INT-2026-000104-01,104,Learner requests an independent review.,Pending,,,2026-05-26T00:00:00,
+38,APL-INT-2026-000105-01,105,Learner requests an independent review.,Pending,,,2026-03-10T00:00:00,
+39,APL-INT-2026-000106-01,106,Learner requests an independent review.,Pending,,,2026-01-31T00:00:00,
+40,APL-INT-2026-000107-01,107,Learner requests an independent review.,Pending,,,2026-04-13T00:00:00,
+41,APL-INT-2026-000108-01,108,Learner requests an independent review.,Pending,,,2026-07-10T00:00:00,
+42,APL-INT-2026-000109-01,109,Learner requests an independent review.,Pending,,,2026-03-10T00:00:00,
+43,APL-INT-2026-000110-01,110,Learner requests an independent review.,Pending,,,2026-04-06T00:00:00,
+44,APL-INT-2026-000111-01,111,Learner requests an independent review.,Pending,,,2026-02-14T00:00:00,
+45,APL-INT-2026-000112-01,112,Learner requests an independent review.,Pending,,,2026-03-26T00:00:00,
+46,APL-INT-2026-000113-01,113,Learner requests an independent review.,Pending,,,2026-02-20T00:00:00,
+47,APL-INT-2026-000114-01,114,Learner requests an independent review.,Pending,,,2026-04-11T00:00:00,
+48,APL-INT-2026-000115-01,115,Learner requests an independent review.,Pending,,,2026-04-26T00:00:00,
+49,APL-INT-2026-000116-01,116,Learner requests an independent review.,Pending,,,2026-05-04T00:00:00,
+50,APL-INT-2026-000117-01,117,Learner requests an independent review.,Pending,,,2026-08-09T00:00:00,
+51,APL-INT-2026-000118-01,118,Learner requests an independent review.,Pending,,,2026-09-17T00:00:00,
+52,APL-INT-2026-000119-01,119,Learner requests an independent review.,Pending,,,2026-03-25T00:00:00,
+53,APL-INT-2026-000120-01,120,Learner requests an independent review.,Pending,,,2026-03-26T00:00:00,
+54,APL-INT-2026-000121-01,121,Learner requests an independent review.,Pending,,,2026-10-14T00:00:00,
+55,APL-INT-2026-000122-01,122,Learner requests an independent review.,Pending,,,2026-02-05T00:00:00,
+56,APL-INT-2026-000123-01,123,Learner requests an independent review.,Pending,,,2026-06-12T00:00:00,
+57,APL-INT-2026-000124-01,124,Learner requests an independent review.,Pending,,,2026-01-18T00:00:00,
+58,APL-INT-2026-000125-01,125,Learner requests an independent review.,Pending,,,2026-07-27T00:00:00,
+59,APL-INT-2026-000126-01,126,Learner requests an independent review.,Pending,,,2026-01-18T00:00:00,
+60,APL-INT-2026-000084-01,84,Synthetic invalid appeal scenario.,Closed,,Closed without independent review,2026-09-03T00:00:00,

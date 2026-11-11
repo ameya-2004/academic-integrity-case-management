@@ -1,0 +1,2 @@
+id,rule_id,rule_name,review_threshold,description,effective_from,effective_to,active
+1,INT-2026-000001,Standard Similarity Review,30.0,Scores at or above 30% trigger human review. Similarity alone does not prove misconduct.,2026-01-01T00:00:00,,True

@@ -1,0 +1,559 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid py-4">
+
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2>Case Management</h2>
+            <p class="text-muted mb-0">Case ID: {{ case.case_id }}</p>
+        </div>
+        <a href="{{ url_for('cases') }}" class="btn btn-outline-secondary">
+            Back to Cases
+        </a>
+    </div>
+
+    <!-- CASE INFORMATION -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h5>Case Information</h5>
+            <hr>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Case ID:</strong> {{ case.case_id }}</p>
+                    <p><strong>Submission ID:</strong> {{ case.submission.submission_id }}</p>
+                    <p><strong>Learner:</strong> {{ case.submission.learner.name }}</p>
+                    <p><strong>Email:</strong> {{ case.submission.learner.email }}</p>
+                </div>
+
+                <div class="col-md-6">
+                    <p><strong>Assessment:</strong> {{ case.submission.assessment.title }}</p>
+                    <p><strong>Status:</strong> {{ case.status }}</p>
+                    <p><strong>Issue Type:</strong> {{ case.issue_type or "Not specified" }}</p>
+                    <p><strong>Created:</strong> {{ case.created_at }}</p>
+                </div>
+            </div>
+
+            <p>
+                <strong>Current Reviewer:</strong>
+                {{ case.reviewer.name if case.reviewer else "Not Assigned" }}
+            </p>
+        </div>
+    </div>
+
+    <!-- INDEPENDENT REVIEW ALERT -->
+    {% if case.status == "Independent Review Required" %}
+    <div class="alert alert-warning mb-4">
+        <h5>Independent Review Required</h5>
+        A conflict of interest was declared after an original decision.
+        The original decision has been preserved. An eligible independent
+        reviewer must now review this case.
+    </div>
+    {% elif case.status == "Independent Review Completed" %}
+    <div class="alert alert-success mb-4">
+        Independent review has been completed.
+    </div>
+    {% elif case.status == "Further Review Required" %}
+    <div class="alert alert-info mb-4">
+        The independent reviewer has requested further review.
+    </div>
+    {% endif %}
+
+    <!-- SIMILARITY REPORT -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h5>Similarity Report</h5>
+            <hr>
+
+            {% if case.similarity_report %}
+            <div class="row">
+                <div class="col-md-4">
+                    <h2 class="text-primary">
+                        {{ "%.1f"|format(case.similarity_report.similarity_score) }}%
+                    </h2>
+                    <p class="text-muted">Similarity Score</p>
+                </div>
+
+                <div class="col-md-4">
+                    <h2>{{ case.similarity_report.matched_sources }}</h2>
+                    <p class="text-muted">Matched Sources</p>
+                </div>
+
+                <div class="col-md-4">
+                    <h5>
+                        {{ "Yes" if case.similarity_report.review_required else "No" }}
+                    </h5>
+                    <p class="text-muted">Human Review Required</p>
+                </div>
+            </div>
+            {% else %}
+            <p class="text-muted">No similarity report available.</p>
+            {% endif %}
+
+            <div class="alert alert-info mb-0">
+                A similarity score is an indicator for human review.
+                It is not proof of academic misconduct.
+            </div>
+        </div>
+    </div>
+
+    <!-- CONFLICT OF INTEREST -->
+    <div class="card shadow-sm mb-4 border-warning">
+        <div class="card-body">
+            <h5>Conflict of Interest Management</h5>
+            <hr>
+
+            <div class="alert alert-warning">
+                Reviewers must declare any personal, professional or other
+                conflict that could affect their impartiality.
+                A conflicted reviewer cannot review this case or its appeal.
+            </div>
+
+            <form method="POST"
+                  action="{{ url_for('declare_conflict', case_id=case.id) }}">
+
+                <div class="mb-3">
+                    <label class="form-label">Reviewer</label>
+
+                    <select name="reviewer_id" class="form-select" required>
+                        <option value="">Select Reviewer</option>
+
+                        {% for reviewer in reviewers %}
+                            {% if reviewer.id not in (case.conflict_declarations|map(attribute='reviewer_id')|list) %}
+                            <option value="{{ reviewer.id }}">
+                                {{ reviewer.name }} - {{ reviewer.role }}
+                            </option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Conflict Reason</label>
+                    <textarea name="reason"
+                              class="form-control"
+                              rows="3"
+                              required></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Declared By</label>
+                    <input type="text"
+                           name="declared_by"
+                           class="form-control"
+                           value="Administrator"
+                           required>
+                </div>
+
+                <button type="submit" class="btn btn-warning">
+                    Declare Conflict
+                </button>
+            </form>
+
+            <hr>
+
+            <h6>Conflict Declaration History</h6>
+
+            {% for conflict in case.conflict_declarations %}
+            <div class="border rounded p-3 mb-3">
+                <strong>{{ conflict.reviewer.name }}</strong>
+                <span class="badge bg-warning text-dark">Conflict Declared</span>
+
+                <p class="mt-2 mb-1">
+                    <strong>Reason:</strong> {{ conflict.reason }}
+                </p>
+
+                <small class="text-muted">
+                    Declared by: {{ conflict.declared_by }}
+                    | {{ conflict.declared_at }}
+                </small>
+            </div>
+            {% else %}
+            <p class="text-muted">No conflicts have been declared for this case.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- REVIEWER ASSIGNMENT -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h5>Reviewer Assignment</h5>
+            <hr>
+
+            <form method="POST"
+                  action="{{ url_for('assign_reviewer', case_id=case.id) }}">
+
+                <label class="form-label">Select Reviewer</label>
+
+                <select name="reviewer_id" class="form-select mb-3" required>
+                    <option value="">Choose Reviewer</option>
+
+                    {% for reviewer in reviewers %}
+                        {% if reviewer.id not in (case.conflict_declarations|map(attribute='reviewer_id')|list) %}
+                        <option value="{{ reviewer.id }}"
+                            {% if case.reviewer_id == reviewer.id %}selected{% endif %}>
+                            {{ reviewer.name }} - {{ reviewer.role }}
+                        </option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+
+                <button type="submit" class="btn btn-primary">
+                    Assign Reviewer
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ADD EVIDENCE -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h5>Add Evidence</h5>
+            <hr>
+
+            <form method="POST"
+                  action="{{ url_for('add_evidence', case_id=case.id) }}">
+
+                <div class="mb-3">
+                    <label class="form-label">Evidence Type</label>
+                    <select name="evidence_type" class="form-select" required>
+                        <option value="">Select Evidence Type</option>
+                        <option value="Similarity Report">Similarity Report</option>
+                        <option value="Document">Document</option>
+                        <option value="Reference Material">Reference Material</option>
+                        <option value="Reviewer Notes">Reviewer Notes</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Description</label>
+                    <textarea name="description"
+                              class="form-control"
+                              rows="3"
+                              required></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Reference / File Location</label>
+                    <input type="text"
+                           name="reference"
+                           class="form-control"
+                           placeholder="Optional document reference">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Added By</label>
+                    <input type="text"
+                           name="added_by"
+                           class="form-control"
+                           value="Administrator">
+                </div>
+
+                <button type="submit" class="btn btn-success">
+                    Add Evidence
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- EVIDENCE LIST -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h5>Evidence Records</h5>
+            <hr>
+
+            {% for evidence in case.evidence_items %}
+            <div class="border rounded p-3 mb-3">
+                <strong>{{ evidence.evidence_type }}</strong>
+                <small class="text-muted">{{ evidence.evidence_id }}</small>
+
+                <p class="mt-2 mb-1">{{ evidence.description }}</p>
+
+                {% if evidence.reference %}
+                <p class="mb-1">
+                    <strong>Reference:</strong> {{ evidence.reference }}
+                </p>
+                {% endif %}
+
+                <small class="text-muted">
+                    Added by {{ evidence.added_by or "Unknown" }}
+                    | {{ evidence.added_at }}
+                </small>
+            </div>
+            {% else %}
+            <p class="text-muted">No evidence added yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- RECORD DECISION -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h5>Record Review Decision</h5>
+            <hr>
+
+            {% if case.decisions %}
+            <div class="alert alert-info">
+                A decision has already been recorded for this case.
+            </div>
+            {% elif case.reviewer_id %}
+            <form method="POST"
+                  action="{{ url_for('add_decision', case_id=case.id) }}">
+
+                <div class="mb-3">
+                    <label class="form-label">Decision Outcome</label>
+                    <select name="outcome" class="form-select" required>
+                        <option value="">Select Outcome</option>
+                        <option value="No Misconduct">No Misconduct</option>
+                        <option value="Further Review Required">Further Review Required</option>
+                        <option value="Misconduct Confirmed">Misconduct Confirmed</option>
+                        <option value="Insufficient Evidence">Insufficient Evidence</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Decision Rationale</label>
+                    <textarea name="rationale"
+                              class="form-control"
+                              rows="4"
+                              required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-warning">
+                    Submit Decision
+                </button>
+            </form>
+            {% else %}
+            <div class="alert alert-warning mb-0">
+                Assign an eligible reviewer before recording a decision.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- DECISION HISTORY -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h5>Decision History</h5>
+            <hr>
+
+            {% for decision in case.decisions %}
+            <div class="border rounded p-3 mb-3">
+                <strong>{{ decision.outcome }}</strong>
+                <p class="mt-2">{{ decision.rationale }}</p>
+                <small class="text-muted">
+                    Reviewer: {{ decision.reviewer.name }}
+                    | {{ decision.decided_at }}
+                </small>
+            </div>
+            {% else %}
+            <p class="text-muted">No decisions recorded.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- INDEPENDENT REVIEW MANAGEMENT -->
+    {% if case.status == "Independent Review Required" or case.independent_reviews %}
+    <div class="card shadow-sm mb-4 border-primary">
+        <div class="card-body">
+            <h5>Independent Review Management</h5>
+            <hr>
+
+            {% if case.status == "Independent Review Required" and not case.independent_reviews %}
+
+            <div class="alert alert-info">
+                Select an independent reviewer who did not make the original
+                decision, is not the assigned reviewer, and has no declared
+                conflict for this case.
+            </div>
+
+            <form method="POST"
+                  action="{{ url_for('complete_independent_review', case_id=case.id) }}">
+
+                <div class="mb-3">
+                    <label class="form-label">Independent Reviewer</label>
+
+                    <select name="reviewer_id" class="form-select" required>
+                        <option value="">Select Independent Reviewer</option>
+
+                        {% for reviewer in reviewers %}
+                            {% if reviewer.id != case.reviewer_id
+                                  and reviewer.id not in (case.decisions|map(attribute='reviewer_id')|list)
+                                  and reviewer.id not in (case.conflict_declarations|map(attribute='reviewer_id')|list) %}
+                            <option value="{{ reviewer.id }}">
+                                {{ reviewer.name }} - {{ reviewer.role }}
+                            </option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Independent Review Outcome</label>
+
+                    <select name="outcome" class="form-select" required>
+                        <option value="">Select Outcome</option>
+                        <option value="Decision Upheld">Decision Upheld</option>
+                        <option value="Decision Overturned">Decision Overturned</option>
+                        <option value="Further Review Required">Further Review Required</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Review Rationale</label>
+
+                    <textarea name="rationale"
+                              class="form-control"
+                              rows="4"
+                              placeholder="Explain the independent review findings"
+                              required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    Complete Independent Review
+                </button>
+            </form>
+
+            {% endif %}
+
+            <hr>
+
+            <h6>Independent Review History</h6>
+
+            {% for review in case.independent_reviews %}
+            <div class="border rounded p-3 mb-3">
+                <div class="d-flex justify-content-between">
+                    <strong>{{ review.review_id }}</strong>
+                    <span class="badge bg-success">Completed</span>
+                </div>
+
+                <p class="mt-2 mb-1">
+                    <strong>Reviewer:</strong> {{ review.reviewer.name }}
+                </p>
+
+                <p class="mb-1">
+                    <strong>Outcome:</strong> {{ review.outcome }}
+                </p>
+
+                <p class="mb-1">
+                    <strong>Rationale:</strong> {{ review.rationale }}
+                </p>
+
+                <small class="text-muted">
+                    Reviewed at: {{ review.reviewed_at }}
+                </small>
+            </div>
+            {% else %}
+            {% if case.status != "Independent Review Required" %}
+            <p class="text-muted">No independent review has been recorded.</p>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- SUBMIT APPEAL -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h5>Submit Appeal</h5>
+            <hr>
+
+            {% if case.decisions and not case.appeals %}
+            <form method="POST"
+                  action="{{ url_for('submit_appeal', case_id=case.id) }}">
+
+                <div class="mb-3">
+                    <label class="form-label">Appeal Reason</label>
+                    <textarea name="reason"
+                              class="form-control"
+                              rows="4"
+                              required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-info">
+                    Submit Appeal
+                </button>
+            </form>
+            {% elif case.appeals %}
+            <div class="alert alert-info mb-0">
+                An appeal has already been submitted for this case.
+            </div>
+            {% else %}
+            <p class="text-muted">
+                An appeal can be submitted after a decision is recorded.
+            </p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- APPEAL HISTORY AND REVIEW -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h5>Appeal Management</h5>
+            <hr>
+
+            {% for appeal in case.appeals %}
+            <div class="border rounded p-3 mb-3">
+
+                <strong>{{ appeal.appeal_id }}</strong>
+                <p class="mt-2"><strong>Reason:</strong> {{ appeal.reason }}</p>
+                <p><strong>Status:</strong> {{ appeal.status }}</p>
+                <p><strong>Outcome:</strong> {{ appeal.outcome or "Pending" }}</p>
+
+                {% if appeal.status == "Pending" %}
+                <form method="POST"
+                      action="{{ url_for('review_appeal', appeal_id=appeal.id) }}">
+
+                    <div class="mb-2">
+                        <label class="form-label">Independent Reviewer</label>
+
+                        <select name="reviewer_id" class="form-select" required>
+                            <option value="">Select Independent Reviewer</option>
+
+                            {% for reviewer in reviewers %}
+                                {% if reviewer.id != case.reviewer_id
+                                      and reviewer.id not in (case.conflict_declarations|map(attribute='reviewer_id')|list)
+                                      and reviewer.id not in (case.decisions|map(attribute='reviewer_id')|list) %}
+                                <option value="{{ reviewer.id }}">
+                                    {{ reviewer.name }} - {{ reviewer.role }}
+                                </option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Appeal Outcome</label>
+                        <select name="outcome" class="form-select" required>
+                            <option value="">Select Outcome</option>
+                            <option value="Decision Upheld">Decision Upheld</option>
+                            <option value="Decision Overturned">Decision Overturned</option>
+                            <option value="Further Review Required">Further Review Required</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        Complete Appeal Review
+                    </button>
+                </form>
+                {% else %}
+                <small class="text-muted">
+                    Independent reviewer:
+                    {{ appeal.independent_reviewer.name
+                       if appeal.independent_reviewer else "Not available" }}
+                </small>
+                {% endif %}
+
+            </div>
+            {% else %}
+            <p class="text-muted">No appeals submitted.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}

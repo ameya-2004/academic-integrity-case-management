@@ -1,0 +1,197 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2>Audit History</h2>
+            <p class="text-muted mb-0">
+                Track activities and changes across academic integrity cases.
+            </p>
+        </div>
+
+        <a href="{{ url_for('dashboard') }}"
+           class="btn btn-outline-secondary">
+            Back to Dashboard
+        </a>
+    </div>
+
+    <!-- STATISTICS -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h6 class="text-muted">Total Events</h6>
+                    <h2>{{ events|length }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h6 class="text-muted">Latest Activity</h6>
+                    <h5>
+                        {% if events %}
+                            {{ events[0].timestamp.strftime("%d-%m-%Y") }}
+                        {% else %}
+                            No activity
+                        {% endif %}
+                    </h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h6 class="text-muted">Tracked Entities</h6>
+                    <h2>
+                        {{ events|map(attribute="entity_type")|unique|list|length }}
+                    </h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEARCH AND FILTER -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-8">
+                    <label class="form-label">Search Activity</label>
+                    <input type="text"
+                           id="auditSearch"
+                           class="form-control"
+                           placeholder="Search event, entity, action or user...">
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Filter by Entity</label>
+                    <select id="entityFilter" class="form-select">
+                        <option value="">All Entities</option>
+                        <option value="Case">Case</option>
+                        <option value="Evidence">Evidence</option>
+                        <option value="Appeal">Appeal</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AUDIT TABLE -->
+    <div class="card shadow-sm">
+        <div class="card-body">
+
+            <h5 class="mb-3">Activity Records</h5>
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle"
+                       id="auditTable">
+
+                    <thead class="table-light">
+                        <tr>
+                            <th>Event ID</th>
+                            <th>Entity</th>
+                            <th>Entity ID</th>
+                            <th>Action</th>
+                            <th>Old Value</th>
+                            <th>New Value</th>
+                            <th>Performed By</th>
+                            <th>Timestamp</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for event in events %}
+                        <tr>
+                            <td>{{ event.event_id }}</td>
+                            <td>
+                                <span class="badge bg-info text-dark">
+                                    {{ event.entity_type }}
+                                </span>
+                            </td>
+                            <td>{{ event.entity_id }}</td>
+                            <td>{{ event.action }}</td>
+                            <td>{{ event.old_value or "-" }}</td>
+                            <td>{{ event.new_value or "-" }}</td>
+                            <td>{{ event.performed_by or "Unknown" }}</td>
+                            <td>
+                                <small>
+                                    {{ event.timestamp.strftime("%d-%m-%Y %H:%M") }}
+                                </small>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="8"
+                                class="text-center text-muted py-4">
+                                No audit events recorded yet.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+            </div>
+
+            <p id="noAuditResults"
+               class="text-center text-muted mt-3"
+               style="display:none;">
+                No matching audit records found.
+            </p>
+
+        </div>
+    </div>
+
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const searchInput = document.getElementById("auditSearch");
+    const entityFilter = document.getElementById("entityFilter");
+    const rows = document.querySelectorAll("#auditTable tbody tr");
+    const noResults = document.getElementById("noAuditResults");
+
+    function filterAudit() {
+
+        const search = searchInput.value.toLowerCase().trim();
+        const entity = entityFilter.value.toLowerCase();
+
+        let visibleCount = 0;
+
+        rows.forEach(function (row) {
+
+            const rowText = row.innerText.toLowerCase();
+            const entityCell = row.cells[1];
+
+            const rowEntity = entityCell
+                ? entityCell.innerText.toLowerCase().trim()
+                : "";
+
+            const matchesSearch = rowText.includes(search);
+            const matchesEntity = !entity || rowEntity === entity;
+
+            if (matchesSearch && matchesEntity) {
+                row.style.display = "";
+                visibleCount++;
+            } else {
+                row.style.display = "none";
+            }
+
+        });
+
+        noResults.style.display =
+            visibleCount === 0 ? "block" : "none";
+    }
+
+    searchInput.addEventListener("input", filterAudit);
+    entityFilter.addEventListener("change", filterAudit);
+
+});
+</script>
+
+{% endblock %}

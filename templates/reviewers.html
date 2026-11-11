@@ -1,0 +1,112 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2>Reviewer Management</h2>
+            <p class="text-muted mb-0">
+                View reviewers and their assigned academic integrity cases.
+            </p>
+        </div>
+
+        <a href="{{ url_for('dashboard') }}"
+           class="btn btn-outline-secondary">
+            Back to Dashboard
+        </a>
+    </div>
+
+    <!-- REVIEWER STATISTICS -->
+    <div class="row g-3 mb-4">
+
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h6 class="text-muted">Total Reviewers</h6>
+                    <h2>{{ reviewers|length }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h6 class="text-muted">Active Reviewers</h6>
+                    <h2>
+                        {{ reviewers|selectattr("active")|list|length }}
+                    </h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h6 class="text-muted">Assigned Cases</h6>
+                    <h2>
+                        {{ reviewers|sum(attribute="cases|length") if false else
+                           reviewers|map(attribute="cases")|map("length")|sum }}
+                    </h2>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- REVIEWER TABLE -->
+    <div class="card shadow-sm">
+        <div class="card-body">
+
+            <h5 class="mb-3">Reviewer Directory</h5>
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Reviewer ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Assigned Cases</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for reviewer in reviewers %}
+                        <tr>
+                            <td>{{ reviewer.reviewer_id }}</td>
+                            <td><strong>{{ reviewer.name }}</strong></td>
+                            <td>{{ reviewer.email }}</td>
+                            <td>{{ reviewer.role }}</td>
+                            <td>
+                                <span class="badge bg-info text-dark">
+                                    {{ reviewer.cases|length }}
+                                </span>
+                            </td>
+                            <td>
+                                {% if reviewer.active %}
+                                    <span class="badge bg-success">Active</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">Inactive</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="6" class="text-center text-muted py-4">
+                                No reviewers found.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+{% endblock %}

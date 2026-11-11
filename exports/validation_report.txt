@@ -1,0 +1,15 @@
+ACADEMIC INTEGRITY DATA VALIDATION
+========================================
+learners: PASS
+assessments: PASS
+submissions: PASS
+similarity_reports: PASS
+flags: PASS
+cases: PASS
+reviewers: PASS
+evidence: PASS
+foreign_keys: PASS
+report_links: PASS
+
+Intentional anomalies: 4
+Anomaly labels stored separately in ground_truth.csv

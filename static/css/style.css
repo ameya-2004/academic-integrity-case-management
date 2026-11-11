@@ -1,0 +1,153 @@
+/* General */
+body {
+    background: #f4f6fb;
+    font-family: "Segoe UI", Arial, sans-serif;
+    color: #263238;
+}
+
+.navbar {
+    background: #172554 !important;
+}
+
+.navbar-brand {
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+.nav-link {
+    color: #e2e8f0 !important;
+    margin-left: 10px;
+}
+
+.nav-link:hover {
+    color: #ffffff !important;
+}
+
+/* Main layout */
+.container,
+.container-fluid {
+    max-width: 1400px;
+}
+
+h2, h3, h4, h5 {
+    color: #172554;
+}
+
+/* Cards */
+.card {
+    border: none;
+    border-radius: 12px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 22px rgba(15, 23, 42, 0.09) !important;
+}
+
+.card-body {
+    padding: 22px;
+}
+
+/* Statistics */
+.card h2 {
+    font-size: 28px;
+}
+
+/* Tables */
+.table {
+    vertical-align: middle;
+}
+
+.table thead th {
+    color: #334155;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    white-space: nowrap;
+}
+
+.table td {
+    font-size: 14px;
+}
+
+.table-hover tbody tr:hover {
+    background: #f1f5f9;
+}
+
+/* Buttons */
+.btn {
+    border-radius: 7px;
+    font-weight: 500;
+    transition: 0.2s ease;
+}
+
+.btn-primary {
+    background: #2563eb;
+    border-color: #2563eb;
+}
+
+.btn-primary:hover {
+    background: #1d4ed8;
+}
+
+/* Forms */
+.form-control,
+.form-select {
+    border-radius: 7px;
+    padding: 10px 12px;
+    border: 1px solid #cbd5e1;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+/* Status labels */
+.badge {
+    padding: 7px 10px;
+    font-weight: 500;
+}
+
+/* Alerts */
+.alert {
+    border: none;
+    border-radius: 10px;
+}
+
+/* Case details */
+.case-section {
+    margin-bottom: 24px;
+}
+
+.case-section h5 {
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+/* Footer */
+footer {
+    background: #ffffff;
+    border-top: 1px solid #e2e8f0;
+    color: #64748b;
+    padding: 18px 0;
+    margin-top: 40px;
+    text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .card-body {
+        padding: 16px;
+    }
+
+    .table {
+        min-width: 650px;
+    }
+
+    h2 {
+        font-size: 22px;
+    }
+}

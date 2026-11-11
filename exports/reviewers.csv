@@ -1,0 +1,11 @@
+id,reviewer_id,name,email,role,active
+1,REV-001,Academic Reviewer 1,reviewer1@example.test,Instructor,True
+2,REV-002,Academic Reviewer 2,reviewer2@example.test,Instructor,True
+3,REV-003,Academic Reviewer 3,reviewer3@example.test,Instructor,True
+4,REV-004,Academic Reviewer 4,reviewer4@example.test,Instructor,True
+5,REV-005,Academic Reviewer 5,reviewer5@example.test,Instructor,True
+6,REV-006,Academic Reviewer 6,reviewer6@example.test,Instructor,True
+7,REV-007,Academic Reviewer 7,reviewer7@example.test,Instructor,True
+8,REV-008,Academic Reviewer 8,reviewer8@example.test,Administrator,True
+9,REV-009,Academic Reviewer 9,reviewer9@example.test,Administrator,True
+10,REV-010,Academic Reviewer 10,reviewer10@example.test,Administrator,True
