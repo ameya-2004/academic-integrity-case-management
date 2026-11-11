@@ -1,15 +1,32 @@
-ACADEMIC INTEGRITY DATA VALIDATION
-========================================
-learners: PASS
-assessments: PASS
-submissions: PASS
-similarity_reports: PASS
-flags: PASS
-cases: PASS
-reviewers: PASS
-evidence: PASS
-foreign_keys: PASS
-report_links: PASS
+ACADEMIC INTEGRITY SYSTEM
+DATA VALIDATION REPORT
 
-Intentional anomalies: 4
-Anomaly labels stored separately in ground_truth.csv
+1. DATASET COUNTS
+Learners: 2000
+Assessments: 20
+Submissions: 10000
+Similarity Reports: 10000
+Reviewers: 10
+Cases: 300
+Evidence Items: 591
+Decisions: 221
+Appeals: 61
+
+2. VALIDATION CHECKLIST
+[ ] Primary key uniqueness
+[ ] Foreign key integrity
+[ ] Required field validation
+[ ] Valid status values
+[ ] Submission and assessment relationships
+[ ] Case and evidence relationships
+[ ] Decision and appeal relationships
+[ ] Date consistency
+
+3. REPRODUCIBILITY
+Generator seed: 20261022
+Repeated generation comparison: Not verified
+
+4. NOTES
+This report documents the dataset structure and
+validation activities. Unverified checks are not
+reported as passed.
